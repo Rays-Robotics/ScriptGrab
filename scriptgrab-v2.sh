@@ -95,6 +95,11 @@ function uninstall_script() {
 }
 
 # Main logic
+if [[ "$1" == "help" || -z "$1" ]]; then
+  display_help
+  exit 0
+fi
+
 case "$1" in
   list)
     echo "Available scripts:"
@@ -120,9 +125,6 @@ case "$1" in
     ;;
   --local)
     install_local_script "$2"
-    ;;
-  help | *)
-    display_help
     ;;
   *)
     install_script "$1"
