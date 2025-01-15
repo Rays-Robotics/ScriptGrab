@@ -3,7 +3,7 @@
 # Define the ScriptGrab directory
 SCRIPTGRAB_DIR="$HOME/scriptgrab"
 
-# Ensure the directory exists
+# Ensure the ScriptGrab directory exists
 mkdir -p "$SCRIPTGRAB_DIR"
 
 # Add ScriptGrab directory to PATH if not already added
@@ -20,12 +20,15 @@ function display_help() {
     echo "  list          List available scripts."
     echo "  <script>      Download and make the specified script executable."
     echo "  rm <script>   Uninstall (remove) the specified script."
+    echo "  autoremove    Remove all installed scripts."
+    echo "  update        Update ScriptGrab by reinstalling it."
 }
 
 # Function to list available scripts
 function list_scripts() {
     echo "Available scripts:"
     echo "  - brave-install"
+    echo "  - disk-usage-checker"
     echo
     echo "Want to add your own script? See the GitHub repository!"
     echo "Add your .sh script to the 'sh' folder, and it will be included in the next version."
@@ -39,6 +42,9 @@ function install_script() {
     case "$script_name" in
         brave-install)
             script_url="https://github.com/Rays-Robotics/Brave-Linux-Installer/raw/refs/heads/main/Linux-brave-installer.v1.sh"
+            ;;
+        disk-usage-checker)
+            script_url="https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/Sh/Disk-usage-checker"
             ;;
         *)
             echo "Error: Unknown script '$script_name'."
@@ -75,6 +81,29 @@ function uninstall_script() {
     fi
 }
 
+# Function to remove all installed scripts
+function autoremove() {
+    read -p "Are you sure you want to remove all installed scripts? (y/n): " confirm
+    if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+        rm -rf "$SCRIPTGRAB_DIR"/*
+        echo "All installed scripts have been removed."
+    else
+        echo "Autoremove canceled."
+    fi
+}
+
+# Function to update ScriptGrab
+function update_scriptgrab() {
+    echo "Updating ScriptGrab..."
+    wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/Uninstall.sh -O uninstall-scriptgrab.sh
+    chmod +x uninstall-scriptgrab.sh
+    ./uninstall-scriptgrab.sh
+
+    wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/install-scriptgrab.sh -O install-scriptgrab.sh
+    chmod +x install-scriptgrab.sh
+    ./install-scriptgrab.sh
+}
+
 # Main logic
 case "$1" in
     help)
@@ -90,6 +119,12 @@ case "$1" in
             uninstall_script "$2"
         fi
         ;;
+    autoremove)
+        autoremove
+        ;;
+    update)
+        update_scriptgrab
+        ;;
     *)
         if [[ -z "$1" ]]; then
             display_help
@@ -98,3 +133,4 @@ case "$1" in
         fi
         ;;
 esac
+
