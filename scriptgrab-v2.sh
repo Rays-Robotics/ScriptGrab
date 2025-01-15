@@ -6,9 +6,13 @@
 SCRIPT_DIR="$HOME/.scriptgrab"
 SCRIPTS_FILE="$SCRIPT_DIR/scripts.list"
 INSTALL_DIR="/usr/local/bin"  # This is where we will store the downloaded scripts
+USER_BIN_DIR="$HOME/bin"      # Fallback directory if /usr/local/bin is not accessible
 
 # Ensure the script directory exists
 mkdir -p "$SCRIPT_DIR"
+
+# Ensure $USER_BIN_DIR exists if fallback is needed
+mkdir -p "$USER_BIN_DIR"
 
 # Function to display help
 show_help() {
@@ -50,9 +54,20 @@ download_script() {
     esac
 
     echo "Downloading and making $script_name executable..."
-    wget "$script_url" -O "$INSTALL_DIR/$script_name"
-    sudo chmod +x "$INSTALL_DIR/$script_name"
-    echo "$script_name has been downloaded and made executable."
+
+    # Try downloading to /usr/local/bin
+    if sudo wget "$script_url" -O "$INSTALL_DIR/$script_name"; then
+        sudo chmod +x "$INSTALL_DIR/$script_name"
+        echo "$script_name has been downloaded and made executable in $INSTALL_DIR."
+    # Fallback to user's bin directory if /usr/local/bin fails
+    elif wget "$script_url" -O "$USER_BIN_DIR/$script_name"; then
+        chmod +x "$USER_BIN_DIR/$script_name"
+        echo "$script_name has been downloaded and made executable in $USER_BIN_DIR."
+    else
+        echo "Error: Failed to download or make $script_name executable."
+        exit 1
+    fi
+
     echo "You can now run it by typing: $script_name"
 }
 
