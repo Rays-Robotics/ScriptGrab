@@ -20,7 +20,3 @@ if [[ -f "$INSTALL_DIR/$SCRIPT_NAME" ]]; then
 else
     echo "Installation failed. Please check your permissions or try again."
 fi
-
-
-
-
