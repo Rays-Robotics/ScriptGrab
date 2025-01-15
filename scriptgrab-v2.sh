@@ -26,6 +26,32 @@ function display_help() {
   echo "  help           - Display this help message."
 }
 
+# Install a script by name
+function install_script() {
+  local script_name="$1"
+  local script_url=""
+  
+  case "$script_name" in
+    "brave-install")
+      script_url="https://github.com/Rays-Robotics/Brave-Linux-Installer/raw/refs/heads/main/Linux-brave-installer.v1.sh"
+      ;;
+    "disk-usage-checker")
+      script_url="https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/Sh/Disk-usage-checker"
+      ;;
+    *)
+      echo "Error: Unknown script '$script_name'."
+      return 1
+      ;;
+  esac
+
+  # Download the script to the script directory
+  wget "$script_url" -O "$SCRIPT_DIR/$script_name"
+  chmod +x "$SCRIPT_DIR/$script_name"
+
+  echo "Script '$script_name' has been installed and is available globally."
+  echo "Run it using: $script_name"
+}
+
 # Install a local script
 function install_local_script() {
   local script_path="$1"
@@ -51,6 +77,23 @@ function install_local_script() {
   echo "Run it using: $script_name"
 }
 
+# Uninstall a script
+function uninstall_script() {
+  local script_name="$1"
+
+  if [[ -z "$script_name" ]]; then
+    echo "Error: No script specified to remove."
+    exit 1
+  fi
+
+  if [[ -f "$SCRIPT_DIR/$script_name" ]]; then
+    rm "$SCRIPT_DIR/$script_name"
+    echo "Script '$script_name' has been removed."
+  else
+    echo "Error: Script '$script_name' not found."
+  fi
+}
+
 # Main logic
 case "$1" in
   list)
@@ -60,17 +103,7 @@ case "$1" in
     echo "To add your own scripts, contribute via GitHub!"
     ;;
   rm)
-    if [[ -z "$2" ]]; then
-      echo "Error: No script specified to remove."
-      exit 1
-    fi
-    script_name="$2"
-    if [[ -f "$SCRIPT_DIR/$script_name" ]]; then
-      rm "$SCRIPT_DIR/$script_name"
-      echo "Script '$script_name' has been removed."
-    else
-      echo "Error: Script '$script_name' not found."
-    fi
+    uninstall_script "$2"
     ;;
   autoremove)
     rm -rf "$SCRIPT_DIR"/*
@@ -90,5 +123,8 @@ case "$1" in
     ;;
   help | *)
     display_help
+    ;;
+  *)
+    install_script "$1"
     ;;
 esac
