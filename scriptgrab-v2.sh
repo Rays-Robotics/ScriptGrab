@@ -7,6 +7,7 @@ SCRIPT_DIR="$HOME/.scriptgrab"
 SCRIPTS_FILE="$SCRIPT_DIR/scripts.list"
 INSTALL_DIR="/usr/local/bin"  # This is where we will store the downloaded scripts
 USER_BIN_DIR="$HOME/bin"      # Fallback directory if /usr/local/bin is not accessible
+ADD_TO_PATH=true              # Default behavior is to add to PATH
 
 # Ensure the script directory exists
 mkdir -p "$SCRIPT_DIR"
@@ -16,13 +17,16 @@ mkdir -p "$USER_BIN_DIR"
 
 # Function to display help
 show_help() {
-    echo "Usage: scriptgrab [command] [package]"
+    echo "Usage: scriptgrab [command] [package] [--nopath]"
     echo ""
     echo "Commands:"
     echo "  help         Show this help message"
     echo "  list         List available scripts"
     echo "  [package]    Download and install the specified package"
     echo "  rm [package] Uninstall the specified package"
+    echo ""
+    echo "Options:"
+    echo "  --nopath     Do not add the script to PATH"
 }
 
 # Function to list available scripts
@@ -88,6 +92,16 @@ download_script() {
         exit 1
     fi
 
+    # Add to PATH if not using --nopath
+    if [ "$ADD_TO_PATH" = true ]; then
+        if ! echo "$PATH" | grep -q "$USER_BIN_DIR"; then
+            echo "Adding $USER_BIN_DIR to PATH..."
+            echo "export PATH=\"$USER_BIN_DIR:\$PATH\"" >> "$HOME/.bashrc"
+            source "$HOME/.bashrc"
+            echo "$USER_BIN_DIR has been added to your PATH."
+        fi
+    fi
+
     echo "You can now run it by typing: $script_name"
 }
 
@@ -110,6 +124,20 @@ remove_script() {
 }
 
 # Main logic
+while [[ "$1" == -* ]]; do
+    case "$1" in
+        --nopath)
+            ADD_TO_PATH=false
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
 case "$1" in
     help)
         show_help
