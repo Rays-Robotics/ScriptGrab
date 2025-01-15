@@ -35,6 +35,16 @@ list_scripts() {
     echo "Add your .sh script to the 'sh' folder, and it will be included in the next version."
 }
 
+# Function to check write permissions to a directory
+check_permissions() {
+    local dir="$1"
+    if [ -w "$dir" ]; then
+        return 0  # Has write permission
+    else
+        return 1  # Does not have write permission
+    fi
+}
+
 # Function to download a script
 download_script() {
     local script_name="$1"
@@ -55,16 +65,26 @@ download_script() {
 
     echo "Downloading and making $script_name executable..."
 
-    # Try downloading to /usr/local/bin
-    if sudo wget "$script_url" -O "$INSTALL_DIR/$script_name"; then
-        sudo chmod +x "$INSTALL_DIR/$script_name"
-        echo "$script_name has been downloaded and made executable in $INSTALL_DIR."
-    # Fallback to user's bin directory if /usr/local/bin fails
-    elif wget "$script_url" -O "$USER_BIN_DIR/$script_name"; then
-        chmod +x "$USER_BIN_DIR/$script_name"
-        echo "$script_name has been downloaded and made executable in $USER_BIN_DIR."
+    # First try downloading to /usr/local/bin if permissions allow
+    if check_permissions "$INSTALL_DIR"; then
+        sudo wget "$script_url" -O "$INSTALL_DIR/$script_name" && sudo chmod +x "$INSTALL_DIR/$script_name"
+        if [ $? -eq 0 ]; then
+            echo "$script_name has been downloaded and made executable in $INSTALL_DIR."
+        else
+            echo "Error: Failed to make $script_name executable in $INSTALL_DIR."
+            exit 1
+        fi
+    # Fallback to user's bin directory if /usr/local/bin is not writable
+    elif check_permissions "$USER_BIN_DIR"; then
+        wget "$script_url" -O "$USER_BIN_DIR/$script_name" && chmod +x "$USER_BIN_DIR/$script_name"
+        if [ $? -eq 0 ]; then
+            echo "$script_name has been downloaded and made executable in $USER_BIN_DIR."
+        else
+            echo "Error: Failed to make $script_name executable in $USER_BIN_DIR."
+            exit 1
+        fi
     else
-        echo "Error: Failed to download or make $script_name executable."
+        echo "Error: Neither $INSTALL_DIR nor $USER_BIN_DIR is writable. Please check your permissions."
         exit 1
     fi
 
@@ -112,3 +132,4 @@ case "$1" in
         fi
         ;;
 esac
+
