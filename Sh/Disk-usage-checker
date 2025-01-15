@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Set the threshold (in percent)
+THRESHOLD=80
+
+# Get the current disk usage percentage
+USAGE=$(df / | grep / | awk '{ print $5 }' | sed 's/%//g')
+
+# Check if the usage exceeds the threshold
+if [ "$USAGE" -gt "$THRESHOLD" ]; then
+    echo "Alert! Disk usage is at ${USAGE}%, which exceeds the threshold of ${THRESHOLD}%."
+else
+    echo "Disk usage is at ${USAGE}%, which is within the safe limit."
+fi
