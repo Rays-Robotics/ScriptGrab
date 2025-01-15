@@ -8,10 +8,10 @@ INSTALL_DIR="/usr/local/bin"
 SCRIPT_NAME="scriptgrab"
 
 # Download ScriptGrab
-wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/scriptgrab-v2.sh -O "$INSTALL_DIR/$SCRIPT_NAME"
+sudo wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/scriptgrab-v2.sh -O "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Make it executable
-chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
+sudo chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Confirm installation
 if [[ -f "$INSTALL_DIR/$SCRIPT_NAME" ]]; then
@@ -20,6 +20,7 @@ if [[ -f "$INSTALL_DIR/$SCRIPT_NAME" ]]; then
 else
     echo "Installation failed. Please check your permissions or try again."
 fi
+
 
 
 
