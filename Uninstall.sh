@@ -1,27 +1,40 @@
 #!/bin/bash
 
-# Uninstaller for ScriptGrab v2
-echo "Uninstalling ScriptGrab v2..."
+# Define the ScriptGrab directory
+SCRIPTGRAB_DIR="$HOME/scriptgrab"
 
-# Define installation directory
-INSTALL_DIR="/usr/local/bin"
-SCRIPT_NAME="scriptgrab"
+# Function to remove ScriptGrab from PATH
+remove_from_path() {
+    if grep -q "$SCRIPTGRAB_DIR" "$HOME/.bashrc"; then
+        sed -i "\|$SCRIPTGRAB_DIR|d" "$HOME/.bashrc"
+        echo "Removed $SCRIPTGRAB_DIR from PATH. Restart your terminal or run 'source ~/.bashrc' to apply changes."
+    else
+        echo "$SCRIPTGRAB_DIR is not in PATH."
+    fi
+}
 
-# Remove the scriptgrab binary
-if [[ -f "$INSTALL_DIR/$SCRIPT_NAME" ]]; then
-    sudo rm "$INSTALL_DIR/$SCRIPT_NAME"
-    echo "ScriptGrab v2 has been uninstalled successfully."
-else
-    echo "Error: ScriptGrab v2 is not installed in $INSTALL_DIR."
+# Confirm uninstallation
+read -p "Are you sure you want to uninstall ScriptGrab? (y/n): " confirm
+if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+    echo "Uninstallation canceled."
+    exit 0
 fi
 
-# Optionally, remove residual scriptgrab files from the user's home directory
-SCRIPTGRAB_DIR="$HOME/.scriptgrab"
+# Optionally remove all packages
 if [[ -d "$SCRIPTGRAB_DIR" ]]; then
-    rm -rf "$SCRIPTGRAB_DIR"
-    echo "Removed residual files from $SCRIPTGRAB_DIR."
+    read -p "Do you want to uninstall all packages and delete the ScriptGrab directory? (y/n): " remove_packages
+    if [[ "$remove_packages" == "y" || "$remove_packages" == "Y" ]]; then
+        rm -rf "$SCRIPTGRAB_DIR"
+        echo "All packages and the ScriptGrab directory have been removed."
+    else
+        echo "The ScriptGrab directory and packages have been retained."
+    fi
 else
-    echo "No residual files found in $SCRIPTGRAB_DIR."
+    echo "ScriptGrab directory not found."
 fi
 
-echo "Uninstallation complete."
+# Remove ScriptGrab from PATH
+remove_from_path
+
+echo "ScriptGrab has been uninstalled."
+
