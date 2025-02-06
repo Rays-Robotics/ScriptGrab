@@ -14,7 +14,7 @@ fi
 
 # Function to display help
 function display_help() {
-    echo "Usage: ./scriptgrab.sh [command]"
+    echo "Usage: scriptgrab [command]"
     echo "Commands:"
     echo "  help          Show this help message."
     echo "  list          List available scripts."
