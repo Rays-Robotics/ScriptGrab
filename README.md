@@ -27,10 +27,10 @@ chmod +x install-scriptgrab.sh
 
 ### Usage
 
-Run the `scriptgrab.sh` script to start managing your shell scripts:
+Run the `scriptgrab` command to start managing your shell scripts:
 
 ```bash
-./scriptgrab.sh
+scriptgrab
 ```
 
 #### Commands
@@ -47,7 +47,7 @@ Run the `scriptgrab.sh` script to start managing your shell scripts:
 
 1. **List Available Scripts**:
    ```bash
-   ./scriptgrab.sh list
+   scriptgrab list
    ```
    Output:
    ```
@@ -60,18 +60,18 @@ Run the `scriptgrab.sh` script to start managing your shell scripts:
 
 2. **Install Brave Browser Installer**:
    ```bash
-   ./scriptgrab.sh brave-install
+   scriptgrab brave-install
    ```
    Output:
    ```
    Downloading and making brave-install executable...
    brave-install has been downloaded and made executable.
-   To use it, run: ./brave-install
+   To use it, run: brave-install
    ```
 
 3. **Uninstall a Script**:
    ```bash
-   ./scriptgrab.sh rm brave-install
+   scriptgrab rm brave-install
    ```
    Output:
    ```
