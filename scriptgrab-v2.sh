@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Define the ScriptGrab directory
+# Define the ScriptGrab directory and version
 SCRIPTGRAB_DIR="$HOME/scriptgrab"
+SCRIPTGRAB_VERSION="v2.1"
 
 # Ensure the ScriptGrab directory exists
 mkdir -p "$SCRIPTGRAB_DIR"
@@ -16,17 +17,19 @@ fi
 function display_help() {
     echo "Usage: scriptgrab [command]"
     echo "Commands:"
-    echo "  help          Show this help message."
-    echo "  list          List available scripts."
-    echo "  <script>      Download and make the specified script executable."
-    echo "  rm <script>   Uninstall (remove) the specified script."
-    echo "  autoremove    Remove all installed scripts."
-    echo "  update        Update ScriptGrab by reinstalling it."
+    echo "  help               Show this help message."
+    echo "  list               List available remote scripts."
+    echo "  local <file>       Install a local .sh script from the specified file path."
+    echo "  about              Show ScriptGrab version and information."
+    echo "  <script>           Download and install the specified remote script."
+    echo "  rm <script>        Uninstall (remove) the specified script."
+    echo "  autoremove         Remove all installed scripts."
+    echo "  update             Update ScriptGrab by reinstalling it."
 }
 
-# Function to list available scripts
+# Function to list available remote scripts
 function list_scripts() {
-    echo "Available scripts:"
+    echo "Available remote scripts:"
     echo "  - brave-install"
     echo "  - disk-usage-checker"
     echo
@@ -34,7 +37,7 @@ function list_scripts() {
     echo "Add your .sh script to the 'sh' folder, and it will be included in the next version."
 }
 
-# Function to download and install a script
+# Function to download and install a remote script
 function install_script() {
     local script_name="$1"
     local script_url=""
@@ -47,7 +50,7 @@ function install_script() {
             script_url="https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/Sh/Disk-usage-checker"
             ;;
         *)
-            echo "Error: Unknown script '$script_name'."
+            echo "Error: Unknown remote script '$script_name'."
             exit 1
             ;;
     esac
@@ -63,6 +66,27 @@ function install_script() {
     fi
 }
 
+# Function to install a local script file
+function install_local_script() {
+    local file_path="$1"
+
+    if [[ ! -f "$file_path" ]]; then
+        echo "Error: File '$file_path' does not exist."
+        exit 1
+    fi
+
+    local script_name
+    script_name="$(basename "$file_path")"
+    
+    cp "$file_path" "$SCRIPTGRAB_DIR/$script_name" && chmod +x "$SCRIPTGRAB_DIR/$script_name"
+    if [[ $? -eq 0 ]]; then
+        echo "$script_name has been installed successfully from local file."
+        echo "You can now run it from anywhere using: $script_name"
+    else
+        echo "Error: Failed to install $script_name from local file."
+    fi
+}
+
 # Function to uninstall a script
 function uninstall_script() {
     local script_name="$1"
@@ -70,7 +94,7 @@ function uninstall_script() {
 
     if [[ -f "$script_path" ]]; then
         read -p "Are you sure you want to uninstall '$script_name'? (y/n): " confirm
-        if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+        if [[ "$confirm" =~ ^[Yy]$ ]]; then
             rm -f "$script_path"
             echo "'$script_name' has been removed."
         else
@@ -84,7 +108,7 @@ function uninstall_script() {
 # Function to remove all installed scripts
 function autoremove() {
     read -p "Are you sure you want to remove all installed scripts? (y/n): " confirm
-    if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
         rm -rf "$SCRIPTGRAB_DIR"/*
         echo "All installed scripts have been removed."
     else
@@ -104,6 +128,25 @@ function update_scriptgrab() {
     ./install-scriptgrab.sh
 }
 
+# Function to display "about" information with ASCII art and version
+function about_scriptgrab() {
+    echo ".........................."
+    echo ".........................."
+    echo "..=%#:...................."
+    echo "..#@%@*..................."
+    echo "...:%@%%*................."
+    echo ".....-%%%%+..............."
+    echo "......:%%%@=.............."
+    echo ".....#%%@#................"
+    echo "...+%%@%:................."
+    echo "..%%%%-.-=++=+==+==+==+=.."
+    echo "..:+=...%%%%%%%%%%%%%%%%:."
+    echo ".........................."
+    echo ".........................."
+    echo ""
+    echo "ScriptGrab version $SCRIPTGRAB_VERSION"
+}
+
 # Main logic
 case "$1" in
     help)
@@ -111,6 +154,17 @@ case "$1" in
         ;;
     list)
         list_scripts
+        ;;
+    local)
+        if [[ -z "$2" ]]; then
+            echo "Usage: scriptgrab local /path/to/script.sh"
+            exit 1
+        else
+            install_local_script "$2"
+        fi
+        ;;
+    about)
+        about_scriptgrab
         ;;
     rm)
         if [[ -z "$2" ]]; then
