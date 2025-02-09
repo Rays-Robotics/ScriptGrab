@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Installer for ScriptGrab v2
-echo "Installing ScriptGrab v2..."
+# Installer for ScriptGrab v2.2
+echo "Installing ScriptGrab v2.2..."
 
 # Define installation directory
 INSTALL_DIR="/usr/local/bin"
 SCRIPT_NAME="scriptgrab"
 
-# Download ScriptGrab
-sudo wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/beta/scriptgrab-v2.sh -O "$INSTALL_DIR/$SCRIPT_NAME"
+# Download ScriptGrab v2.2
+sudo wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/scriptgrab-v2.sh -O "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Make it executable
 sudo chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
