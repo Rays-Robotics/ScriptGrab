@@ -1,5 +1,9 @@
 # ScriptGrab
 
+> **Warning:** This is an **experimental beta branch**  
+> **Bugs may be present.** If you prefer a stable experience without potential glitches switch to the [main branch](https://github.com/Rays-Robotics/ScriptGrab) which only includes the CLI version.  
+>
+> 
 **ScriptGrab** is a lightweight and powerful script manager designed to make downloading, managing, and running shell scripts a breeze. With ScriptGrab, you can quickly grab scripts from trusted sources, install local scripts, display tool information, and even uninstall or update them—all from a single command-line interface.
 
 ---
