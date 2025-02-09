@@ -1,30 +1,47 @@
 #!/bin/bash
 
-# Define the ScriptGrab directory and version
-SCRIPTGRAB_DIR="$HOME/scriptgrab"
-SCRIPTGRAB_VERSION="v2.1"
+# ScriptGrab version and directory (XDG compliant)
+SCRIPTGRAB_VERSION="v2.2"
+SCRIPTGRAB_DIR="$HOME/.local/share/scriptgrab"
 
 # Ensure the ScriptGrab directory exists
 mkdir -p "$SCRIPTGRAB_DIR"
 
+# Detect shell and set config file
+SHELL_NAME=$(basename "$SHELL")
+CONFIG_FILE=""
+
+case "$SHELL_NAME" in
+  bash)
+    CONFIG_FILE="$HOME/.bashrc"
+    ;;
+  zsh)
+    CONFIG_FILE="$HOME/.zshrc"
+    ;;
+  *)
+    CONFIG_FILE="$HOME/.bashrc" # Default to bashrc, but warn user
+    echo "Warning: Shell '$SHELL_NAME' detected. Adding to .bashrc as default. For best results, manually add the ScriptGrab directory to your shell's configuration if it's not bash or zsh."
+    ;;
+esac
+
 # Add ScriptGrab directory to PATH if not already added
 if [[ ":$PATH:" != *":$SCRIPTGRAB_DIR:"* ]]; then
-    echo "export PATH=\$PATH:$SCRIPTGRAB_DIR" >> "$HOME/.bashrc"
-    echo "Added $SCRIPTGRAB_DIR to PATH. Restart your terminal or run 'source ~/.bashrc' to apply changes."
+    echo "export PATH=\"\$PATH:\$SCRIPTGRAB_DIR\"" >> "$CONFIG_FILE"
+    echo "Added $SCRIPTGRAB_DIR to PATH in '$CONFIG_FILE'. Restart your terminal or run 'source $CONFIG_FILE' to apply changes."
 fi
 
 # Function to display help
 function display_help() {
     echo "Usage: scriptgrab [command]"
     echo "Commands:"
-    echo "  help               Show this help message."
-    echo "  list               List available remote scripts."
-    echo "  local <file>       Install a local .sh script from the specified file path."
-    echo "  about              Show ScriptGrab version and information."
-    echo "  <script>           Download and install the specified remote script."
-    echo "  rm <script>        Uninstall (remove) the specified script."
-    echo "  autoremove         Remove all installed scripts."
-    echo "  update             Update ScriptGrab by reinstalling it."
+    echo "  help                  Show this help message."
+    echo "  list                  List available remote scripts."
+    echo "  local <file>          Install a local .sh script from the specified file path."
+    echo "  about                 Show ScriptGrab version and information."
+    echo "  <script>              Download and install the specified remote script."
+    echo "  rm <script>           Uninstall (remove) the specified script."
+    echo "  autoremove           Remove all installed scripts."
+    echo "  update                Update ScriptGrab by reinstalling it."
 }
 
 # Function to list available remote scripts
@@ -77,7 +94,7 @@ function install_local_script() {
 
     local script_name
     script_name="$(basename "$file_path")"
-    
+
     cp "$file_path" "$SCRIPTGRAB_DIR/$script_name" && chmod +x "$SCRIPTGRAB_DIR/$script_name"
     if [[ $? -eq 0 ]]; then
         echo "$script_name has been installed successfully from local file."
