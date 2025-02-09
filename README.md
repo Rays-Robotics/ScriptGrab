@@ -27,7 +27,7 @@
 To install ScriptGrab, run the following commands in your terminal:
 
 ```bash
-wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/install-scriptgrab.sh -O install-scriptgrab.sh
+wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/Beta/install-scriptgrab.sh -O install-scriptgrab.sh
 chmod +x install-scriptgrab.sh
 ./install-scriptgrab.sh
 ```
