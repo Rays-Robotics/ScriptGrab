@@ -8,7 +8,7 @@ INSTALL_DIR="/usr/local/bin"
 SCRIPT_NAME="scriptgrab"
 
 # Download ScriptGrab v2.2
-sudo wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/scriptgrab-v2.sh -O "$INSTALL_DIR/$SCRIPT_NAME"
+sudo wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/Beta/scriptgrab-v2.sh -O "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Make it executable
 sudo chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
