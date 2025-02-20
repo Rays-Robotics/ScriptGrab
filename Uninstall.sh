@@ -3,14 +3,34 @@
 # Define the ScriptGrab directory
 SCRIPTGRAB_DIR="$HOME/scriptgrab"
 
-# Function to remove ScriptGrab from PATH
+# Detect the shell (default to bash)
+USER_SHELL=$(basename "$SHELL")
+CONFIG_FILES=("$HOME/.bashrc" "$HOME/.zshrc")
+
+# Function to remove ScriptGrab from PATH in config files
 remove_from_path() {
-    if grep -q "$SCRIPTGRAB_DIR" "$HOME/.bashrc"; then
-        sed -i "\|$SCRIPTGRAB_DIR|d" "$HOME/.bashrc"
-        echo "Removed $SCRIPTGRAB_DIR from PATH. Restart your terminal or run 'source ~/.bashrc' to apply changes."
-    else
-        echo "$SCRIPTGRAB_DIR is not in PATH."
-    fi
+    for CONFIG_FILE in "${CONFIG_FILES[@]}"; do
+        if [[ -f "$CONFIG_FILE" ]]; then
+            if grep -q "$SCRIPTGRAB_DIR" "$CONFIG_FILE"; then
+                echo "Found ScriptGrab path in $CONFIG_FILE."
+                
+                # Create a backup before modifying
+                cp "$CONFIG_FILE" "$CONFIG_FILE.bak"
+                echo "Backup created: $CONFIG_FILE.bak"
+                
+                # macOS compatibility: sed -i requires an argument
+                if [[ "$OSTYPE" == "darwin"* ]]; then
+                    sed -i '' "\|$SCRIPTGRAB_DIR|d" "$CONFIG_FILE"
+                else
+                    sed -i "\|$SCRIPTGRAB_DIR|d" "$CONFIG_FILE"
+                fi
+                
+                echo "Removed $SCRIPTGRAB_DIR from $CONFIG_FILE. Restart your terminal or run 'source $CONFIG_FILE' to apply changes."
+            else
+                echo "No ScriptGrab path found in $CONFIG_FILE."
+            fi
+        fi
+    done
 }
 
 # Confirm uninstallation
@@ -20,21 +40,25 @@ if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
     exit 0
 fi
 
-# Optionally remove all packages
+# Check if ScriptGrab directory exists before attempting deletion
 if [[ -d "$SCRIPTGRAB_DIR" ]]; then
-    read -p "Do you want to uninstall all packages and delete the ScriptGrab directory? (y/n): " remove_packages
-    if [[ "$remove_packages" == "y" || "$remove_packages" == "Y" ]]; then
-        rm -rf "$SCRIPTGRAB_DIR"
-        echo "All packages and the ScriptGrab directory have been removed."
+    read -p "Do you want to delete all ScriptGrab files? (y/n): " remove_files
+    if [[ "$remove_files" == "y" || "$remove_files" == "Y" ]]; then
+        read -p "Are you absolutely sure? This action cannot be undone. (y/n): " final_confirm
+        if [[ "$final_confirm" == "y" || "$final_confirm" == "Y" ]]; then
+            rm -rf "$SCRIPTGRAB_DIR"
+            echo "ScriptGrab directory and all packages have been deleted."
+        else
+            echo "Deletion canceled. ScriptGrab directory retained."
+        fi
     else
-        echo "The ScriptGrab directory and packages have been retained."
+        echo "ScriptGrab directory and packages have been kept."
     fi
 else
-    echo "ScriptGrab directory not found."
+    echo "ScriptGrab directory not found. Nothing to delete."
 fi
 
 # Remove ScriptGrab from PATH
 remove_from_path
 
-echo "ScriptGrab has been uninstalled."
-
+echo "ScriptGrab has been uninstalled successfully."
