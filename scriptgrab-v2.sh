@@ -140,7 +140,7 @@ function update_scriptgrab() {
     chmod +x uninstall-scriptgrab.sh
     ./uninstall-scriptgrab.sh
 
-    wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/install-scriptgrab.sh -O install-scriptgrab.sh
+    wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/Beta/install-scriptgrab.sh -O install-scriptgrab.sh
     chmod +x install-scriptgrab.sh
     ./install-scriptgrab.sh
 }
