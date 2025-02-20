@@ -136,7 +136,7 @@ function autoremove() {
 # Function to update ScriptGrab
 function update_scriptgrab() {
     echo "Updating ScriptGrab..."
-    wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/main/Uninstall.sh -O uninstall-scriptgrab.sh
+    wget https://github.com/Rays-Robotics/ScriptGrab/raw/refs/heads/Beta/Uninstall.sh -O uninstall-scriptgrab.sh
     chmod +x uninstall-scriptgrab.sh
     ./uninstall-scriptgrab.sh
 
