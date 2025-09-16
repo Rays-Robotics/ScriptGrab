@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ScriptGrab version and directory (XDG compliant)
-SCRIPTGRAB_VERSION="v2.3"
+SCRIPTGRAB_VERSION="v2.2"
 SCRIPTGRAB_DIR="$HOME/.local/share/scriptgrab"
 
 # Ensure the ScriptGrab directory exists
