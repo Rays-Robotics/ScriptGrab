@@ -116,7 +116,7 @@ scriptgrab
 We welcome contributions from the community! To add your script to ScriptGrab:
 
 1. Fork the repository.
-2. Add your `.sh` script to the `sh` folder.
+2. Add your `.sh` script to the `sh` folder **in the main branch**.
 3. Submit a pull request with a brief description of your script.
 
 Your script will be reviewed and included in the next version of ScriptGrab.
