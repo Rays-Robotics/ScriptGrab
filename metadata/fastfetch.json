@@ -24,7 +24,6 @@
     "bin_command": "fastfetch"
   },
   "dependencies": [
-    "librpm",
     "libpulse",
     "libddcutil"
   ],
