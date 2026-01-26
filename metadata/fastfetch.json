@@ -20,13 +20,13 @@
   },
   "install_logic": {
     "extract_to": "~/.local/share/fastfetch",
-    "main_bin": "fastfetch/usr/bin/fastfetch",
+    "main_bin": "usr/bin/fastfetch",
     "bin_command": "fastfetch"
   },
   "dependencies": [
     "librpm",
     "libpulse",
-    "libddcutil",
-    "DirectX-Headers",
+    "libddcutil"
   ],
-  "desktop_entry": ""
+  "desktop_entry": null
+}
