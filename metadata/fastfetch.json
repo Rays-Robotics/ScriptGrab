@@ -1,0 +1,32 @@
+{
+  "package_name": "fastfetch",
+  "version": "2.58.0",
+  "description": "A maintained, feature-rich and performance oriented, neofetch like system information tool.",
+  "website": "https://github.com/fastfetch-cli/fastfetch",
+  "license": "MIT License",
+  "license_url": "https://mit-license.org/",
+  "date_added": "2026-01-26",
+  "architectures": {
+    "x86_64": {
+      "url": "https://github.com/fastfetch-cli/fastfetch/releases/download/2.58.0/fastfetch-linux-amd64.tar.gz",
+      "hash": "7d289e3ff3c77f00f0e7929e0f9b0afbb6b1bdcd68c1607333052dad232f0381e90c79e9831969000dabdb4fb4cef383036ac0a04e2827d58e074107fc33ed03",
+      "hash_type": "b2sum"
+    },
+    "aarch64": {
+      "url": "https://github.com/fastfetch-cli/fastfetch/releases/download/2.58.0/fastfetch-linux-aarch64.tar.gz",
+      "hash": "904a57ee553cc34defb80672871c5af795b308c5f9f4330fa3d04acd5fb0bf1d85a81b49accf6852cce2bbe09706571a58d8073c1624e001e4489181d51953f8",
+      "hash_type": "b2sum"
+    }
+  },
+  "install_logic": {
+    "extract_to": "~/.local/share/fastfetch",
+    "main_bin": "fastfetch/usr/bin/fastfetch",
+    "bin_command": "fastfetch"
+  },
+  "dependencies": [
+    "librpm",
+    "libpulse",
+    "libddcutil",
+    "DirectX-Headers",
+  ],
+  "desktop_entry": ""
