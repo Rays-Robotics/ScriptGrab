@@ -1,9 +1,9 @@
 {
   "package_name": "fastfetch",
   "version": "2.58.0",
-  "description": "A maintained, feature-rich and performance oriented, neofetch like system information tool.",
+  "description": "A maintained system information tool.",
   "website": "https://github.com/fastfetch-cli/fastfetch",
-  "license": "MIT License",
+  "license": "MIT",
   "license_url": "https://mit-license.org/",
   "date_added": "2026-01-26",
   "architectures": {
