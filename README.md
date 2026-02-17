@@ -107,6 +107,12 @@ scriptgrab
 
 ---
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Rays-Robotics/ScriptGrab&type=date&legend=top-left)](https://www.star-history.com/#Rays-Robotics/ScriptGrab&type=date&legend=top-left)
+
+---
+
 ## Contributing
 
 We welcome contributions from the community! To add your script to ScriptGrab:
